@@ -1,281 +1,117 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
-<title>js粒子旋涡</title>
-
-<style>
-html,body{
-	margin:0px;
-	width:100%;
-	height:100%;
-	overflow:hidden;
-  background:#000;
-}
-
-#canvas{
-	position:absolute;
-	width:100%;
-	height:100%;
-}
-</style>
+	<title>Our Love Story</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<style type="text/css">
+		@font-face {
+			font-family: digit;
+			src: url('digital.ttf') format("truetype");
+		}
+	</style>
+	<link href="css/default.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/garden.js"></script>
+	<script type="text/javascript" src="js/functions.js"></script>
+	<!-- 添加背景音乐 -->
+	<audio autoplay loop src="Breathe You In-Monrose.mp3"></audio>
+	<!-- <embed src="Breathe You In-Monrose.mp3" hidden="true" autostart="true" loop="true"> -->
 </head>
+
 <body>
+<div id="mainDiv">
+	<div id="content">
+		<div id="code">
+			<span class="comments">##</span><br/>
+			<span class="comments"># I am a programmer,</span><br/>
+			<span class="comments"># so I write code to celebrate Valentine's Day in coder's way.</span><br/>
+			<span class="comments">##</span><br/>
+			i = Boy(<span class="string">"Zhang Jianhua"</span>);<br/>
+			u = Girl(<span class="string">"Sun Leisi"</span>);<br/>
+			<span class="comments"># Jan 10, 2019, I meet you because of Mass entrepreneurship and innovation training camp. </span><br/>
+			i.meet(u)<br/>
+			<span class="comments"># Afterwards, I confessed to you. </span><br/>
+			i.confess(u)<br/>
+			<span class="comments"># Mar 20, 2019, You became my girlfriend.</span><br/>
+			u.accepted(i)<br/>
+			<span class="comments"># Since then, we spent harmony happiness life every day.</span><br/>
+			happy(u, i)<br/>
+			<span class="comments"># We enjoy studying together.</span><br/>
+			study(u, i)<br/>
+			<span class="comments"># We enjoy cuisine together.</span><br/>
+			dine(u, i)<br/>
+			<span class="comments"># We enjoy appointment together.</span><br/>
+			appoint(u, i)<br/>
+			<span class="comments"># We enjoy vacation together.</span><br/>
+			vacation(u, i)<br/>
+			<span class="comments"># Sometimes there are a few conflicts between us.</span><br/>
+			conflict(u, i, sometimes=<span class="keyword">True</span>)<br/>
+			<span class="comments"># But we are getting more and more in harmony together.</span><br/>
+			u.in_harmony_with(i) <br/>
+			i.in_harmony_with(u) <br/>
+			<span class="comments"># You are the greatest love of my life.</span><br/>
+			while <span class="keyword">True</span>:<br/>
+			<span class="placeholder"></span><span class="keyword">if</span> u.with(i):<br/>
+			<span class="placeholder"></span><span class="placeholder"></span>u = everything<br/>
+			<span class="placeholder"></span><span class="keyword">else</span>:<br/>
+			<span class="placeholder"></span><span class="placeholder"></span>everything = u<br/>
+			<span class="comments"># Waiting me marries you, we will be the happiest couple in the world.</span><br/>
+			i.marry(u, in_the_future=<span class="keyword">True</span>)<br/>
+			i.live_happily_forever_with(u)<br/>
+			<span class="comments"># I love you forever.</span><br/>
+		</div>
+		<div id="loveHeart">
+			<canvas id="garden"></canvas>
+			<div id="words">
+				<div id="messages">
+					Si, I have fallen in love with you for
+					<div id="elapseClock"></div>
+				</div>
+				<div id="loveu">
+					Love u forever and ever.<br/>
+					<div class="signature">- Jonny | Rose</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="copyright">
+		Copyright © 2021 <a href='https://ahuaseesee.top'>ahuaseesee.top</a> 2021-2022
+	</div>
+</div>
+<script type="text/javascript">
+	var offsetX = $("#loveHeart").width() / 2;
+	var offsetY = $("#loveHeart").height() / 2 - 55;
+	var together = new Date();
+	// 此处月份介于 0 ~ 11 之间。用本地时间表示，如 8 月要用 7 表示。
+	together.setFullYear(2019, 2, 20);
+	together.setHours(21);
+	together.setMinutes(0);
+	together.setSeconds(0);
+	together.setMilliseconds(0);
 
-<canvas id="canvas"></canvas>
+	if (!document.createElement('canvas').getContext) {
+		var msg = document.createElement("div");
+		msg.id = "errorMsg";
+		msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
+		document.body.appendChild(msg);
+		$("#code").css("display", "none")
+		$("#copyright").css("position", "absolute");
+		$("#copyright").css("bottom", "10px");
+		document.execCommand("stop");
+	} else {
+		setTimeout(function () {
+			startHeartAnimation();
+		}, 5000);
 
-<script>
-function project3D(x,y,z,vars){
+		timeElapse(together);
+		setInterval(function () {
+			timeElapse(together);
+		}, 500);
 
-	var p,d;
-	x-=vars.camX;
-	y-=vars.camY-8;
-	z-=vars.camZ;
-	p=Math.atan2(x,z);
-	d=Math.sqrt(x*x+z*z);
-	x=Math.sin(p-vars.yaw)*d;
-	z=Math.cos(p-vars.yaw)*d;
-	p=Math.atan2(y,z);
-	d=Math.sqrt(y*y+z*z);
-	y=Math.sin(p-vars.pitch)*d;
-	z=Math.cos(p-vars.pitch)*d;
-	var rx1=-1000;
-	var ry1=1;
-	var rx2=1000;
-	var ry2=1;
-	var rx3=0;
-	var ry3=0;
-	var rx4=x;
-	var ry4=z;
-	var uc=(ry4-ry3)*(rx2-rx1)-(rx4-rx3)*(ry2-ry1);
-	var ua=((rx4-rx3)*(ry1-ry3)-(ry4-ry3)*(rx1-rx3))/uc;
-	var ub=((rx2-rx1)*(ry1-ry3)-(ry2-ry1)*(rx1-rx3))/uc;
-	if(!z)z=0.000000001;
-	if(ua>0&&ua<1&&ub>0&&ub<1){
-		return {
-			x:vars.cx+(rx1+ua*(rx2-rx1))*vars.scale,
-			y:vars.cy+y/z*vars.scale,
-			d:(x*x+y*y+z*z)
-		};
-	}else{
-		return { d:-1 };
+		adjustCodePosition();
+		$("#code").typewriter();
 	}
-}
-
-
-function elevation(x,y,z){
-
-	var dist = Math.sqrt(x*x+y*y+z*z);
-	if(dist && z/dist>=-1 && z/dist <=1) return Math.acos(z / dist);
-	return 0.00000001;
-}
-
-
-function rgb(col){
-
-	col += 0.000001;
-	var r = parseInt((0.5+Math.sin(col)*0.5)*16);
-	var g = parseInt((0.5+Math.cos(col)*0.5)*16);
-	var b = parseInt((0.5-Math.sin(col)*0.5)*16);
-	return "#"+r.toString(16)+g.toString(16)+b.toString(16);
-}
-
-
-function interpolateColors(RGB1,RGB2,degree){
-	
-	var w2=degree;
-	var w1=1-w2;
-	return [w1*RGB1[0]+w2*RGB2[0],w1*RGB1[1]+w2*RGB2[1],w1*RGB1[2]+w2*RGB2[2]];
-}
-
-
-function rgbArray(col){
-
-	col += 0.000001;
-	var r = parseInt((0.5+Math.sin(col)*0.5)*256);
-	var g = parseInt((0.5+Math.cos(col)*0.5)*256);
-	var b = parseInt((0.5-Math.sin(col)*0.5)*256);
-	return [r, g, b];
-}
-
-
-function colorString(arr){
-
-	var r = parseInt(arr[0]);
-	var g = parseInt(arr[1]);
-	var b = parseInt(arr[2]);
-	return "#"+("0" + r.toString(16) ).slice (-2)+("0" + g.toString(16) ).slice (-2)+("0" + b.toString(16) ).slice (-2);
-}
-
-
-function process(vars){
-
-
-	if(vars.points.length<vars.initParticles) for(var i=0;i<5;++i) spawnParticle(vars);
-	var p,d,t;
-	
-	p = Math.atan2(vars.camX, vars.camZ);
-	d = Math.sqrt(vars.camX * vars.camX + vars.camZ * vars.camZ);
-	d -= Math.sin(vars.frameNo / 80) / 25;
-	t = Math.cos(vars.frameNo / 300) / 165;
-	vars.camX = Math.sin(p + t) * d;
-	vars.camZ = Math.cos(p + t) * d;
-	vars.camY = -Math.sin(vars.frameNo / 220) * 15;
-	vars.yaw = Math.PI + p + t;
-	vars.pitch = elevation(vars.camX, vars.camZ, vars.camY) - Math.PI / 2;
-	
-	var t;
-	for(var i=0;i<vars.points.length;++i){
-		
-		x=vars.points[i].x;
-		y=vars.points[i].y;
-		z=vars.points[i].z;
-		d=Math.sqrt(x*x+z*z)/1.0075;
-		t=.1/(1+d*d/5);
-		p=Math.atan2(x,z)+t;
-		vars.points[i].x=Math.sin(p)*d;
-		vars.points[i].z=Math.cos(p)*d;
-		vars.points[i].y+=vars.points[i].vy*t*((Math.sqrt(vars.distributionRadius)-d)*2);
-		if(vars.points[i].y>vars.vortexHeight/2 || d<.25){
-			vars.points.splice(i,1);
-			spawnParticle(vars);
-		}
-	}
-}
-
-function drawFloor(vars){
-	
-	var x,y,z,d,point,a;
-	for (var i = -25; i <= 25; i += 1) {
-		for (var j = -25; j <= 25; j += 1) {
-			x = i*2;
-			z = j*2;
-			y = vars.floor;
-			d = Math.sqrt(x * x + z * z);
-			point = project3D(x, y-d*d/85, z, vars);
-			if (point.d != -1) {
-				size = 1 + 15000 / (1 + point.d);
-				a = 0.15 - Math.pow(d / 50, 4) * 0.15;
-				if (a > 0) {
-					vars.ctx.fillStyle = colorString(interpolateColors(rgbArray(d/26-vars.frameNo/40),[0,128,32],.5+Math.sin(d/6-vars.frameNo/8)/2));
-					vars.ctx.globalAlpha = a;
-					vars.ctx.fillRect(point.x-size/2,point.y-size/2,size,size);
-				}
-			}
-		}
-	}		
-	vars.ctx.fillStyle = "#82f";
-	for (var i = -25; i <= 25; i += 1) {
-		for (var j = -25; j <= 25; j += 1) {
-			x = i*2;
-			z = j*2;
-			y = -vars.floor;
-			d = Math.sqrt(x * x + z * z);
-			point = project3D(x, y+d*d/85, z, vars);
-			if (point.d != -1) {
-				size = 1 + 15000 / (1 + point.d);
-				a = 0.15 - Math.pow(d / 50, 4) * 0.15;
-				if (a > 0) {
-					vars.ctx.fillStyle = colorString(interpolateColors(rgbArray(-d/26-vars.frameNo/40),[32,0,128],.5+Math.sin(-d/6-vars.frameNo/8)/2));
-					vars.ctx.globalAlpha = a;
-					vars.ctx.fillRect(point.x-size/2,point.y-size/2,size,size);
-				}
-			}
-		}
-	}		
-}
-
-function sortFunction(a,b){
-	return b.dist-a.dist;
-}
-
-function draw(vars){
-
-	vars.ctx.globalAlpha=.15;
-	vars.ctx.fillStyle="#000";
-	vars.ctx.fillRect(0, 0, canvas.width, canvas.height);
-	
-	drawFloor(vars);
-	
-	var point,x,y,z,a;
-	for(var i=0;i<vars.points.length;++i){
-		x=vars.points[i].x;
-		y=vars.points[i].y;
-		z=vars.points[i].z;
-		point=project3D(x,y,z,vars);
-		if(point.d != -1){
-			vars.points[i].dist=point.d;
-			size=1+vars.points[i].radius/(1+point.d);
-			d=Math.abs(vars.points[i].y);
-			a = .8 - Math.pow(d / (vars.vortexHeight/2), 1000) * .8;
-			vars.ctx.globalAlpha=a>=0&&a<=1?a:0;
-			vars.ctx.fillStyle=rgb(vars.points[i].color);
-			if(point.x>-1&&point.x<vars.canvas.width&&point.y>-1&&point.y<vars.canvas.height)vars.ctx.fillRect(point.x-size/2,point.y-size/2,size,size);
-		}
-	}
-	vars.points.sort(sortFunction);
-}
-
-
-function spawnParticle(vars){
-
-	var p,ls;
-	pt={};
-	p=Math.PI*2*Math.random();
-	ls=Math.sqrt(Math.random()*vars.distributionRadius);
-	pt.x=Math.sin(p)*ls;
-	pt.y=-vars.vortexHeight/2;
-	pt.vy=vars.initV/20+Math.random()*vars.initV;
-	pt.z=Math.cos(p)*ls;
-	pt.radius=200+800*Math.random();
-	pt.color=pt.radius/1000+vars.frameNo/250;
-	vars.points.push(pt);	
-}
-
-function frame(vars) {
-
-	if(vars === undefined){
-		var vars={};
-		vars.canvas = document.querySelector("canvas");
-		vars.ctx = vars.canvas.getContext("2d");
-		vars.canvas.width = document.body.clientWidth;
-		vars.canvas.height = document.body.clientHeight;
-		window.addEventListener("resize", function(){
-			vars.canvas.width = document.body.clientWidth;
-			vars.canvas.height = document.body.clientHeight;
-			vars.cx=vars.canvas.width/2;
-			vars.cy=vars.canvas.height/2;
-		}, true);
-		vars.frameNo=0;
-
-		vars.camX = 0;
-		vars.camY = 0;
-		vars.camZ = -14;
-		vars.pitch = elevation(vars.camX, vars.camZ, vars.camY) - Math.PI / 2;
-		vars.yaw = 0;
-		vars.cx=vars.canvas.width/2;
-		vars.cy=vars.canvas.height/2;
-		vars.bounding=10;
-		vars.scale=500;
-		vars.floor=26.5;
-
-		vars.points=[];
-		vars.initParticles=700;
-		vars.initV=.01;
-		vars.distributionRadius=800;
-		vars.vortexHeight=25;
-	}
-
-	vars.frameNo++;
-	requestAnimationFrame(function() {
-		frame(vars);
-	});
-
-	process(vars);
-	draw(vars);
-}
-frame();
 </script>
-<h2>商品销售管理系统</h2>
 </body>
 </html>
